@@ -117,7 +117,7 @@ class CorrelationFunction(object):
     def cosmo(self):
         return self.power.cosmo
 
-    def __call__(self, r, smoothing=0., kmin=1e-5, kmax=10.):
+    def __call__(self, r, bias=False, smoothing=0., kmin=1e-5, kmax=10.):
         """
         Return the correlation function (dimensionless) for separations ``r``
 
@@ -137,6 +137,10 @@ class CorrelationFunction(object):
 
         # power with smoothing
         Pk = self.power(k)
+        
+        if bias is not False:
+                Pk = bias**2 * self.power(k)
+                
         Pk *= numpy.exp(-(k*smoothing)**2)
 
         # only extrap if not zeldovich
